@@ -1,4 +1,11 @@
-# 💷 QuidWise [Live App](https://quidwise.streamlit.app/)
+# 💷 QuidWise 
+<a href="https://quidwise.streamlit.app/" target="_blank" rel="noopener noreferrer">
+  🚀 Live App
+  
+</a>
+
+</a>
+
 
 
 **Smart Money for the UK** — An AI-powered personal finance assistant built with LangGraph.
