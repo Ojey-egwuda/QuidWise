@@ -1,5 +1,5 @@
 """
-QuidWise - World-Class Streamlit Interface
+MoneyMind UK - World-Class Streamlit Interface
 Personal Finance Assistant for UK Residents
 """
 import streamlit as st
@@ -44,7 +44,7 @@ st.markdown("""
         font-weight: 700;
     }
     
-    /* Tab styling - FIXED FOR DARK MODE */
+    /* Tab styling - WORKS IN BOTH LIGHT AND DARK MODE */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px;
         background-color: transparent;
@@ -53,14 +53,14 @@ st.markdown("""
     .stTabs [data-baseweb="tab"] {
         height: 50px;
         padding: 10px 20px;
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: #374151 !important;
         border-radius: 8px 8px 0 0;
         font-weight: 600;
         color: white !important;
     }
     
     .stTabs [data-baseweb="tab"]:hover {
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: #4B5563 !important;
     }
     
     .stTabs [aria-selected="true"] {
@@ -68,12 +68,14 @@ st.markdown("""
         color: white !important;
     }
     
-    /* Tab text color fix for dark mode */
-    .stTabs [data-baseweb="tab"] > div {
-        color: inherit !important;
+    /* Force text color on all tab elements */
+    .stTabs [data-baseweb="tab"] * {
+        color: white !important;
     }
     
-    .stTabs button[data-baseweb="tab"] p {
+    .stTabs [data-baseweb="tab"] p,
+    .stTabs [data-baseweb="tab"] span,
+    .stTabs [data-baseweb="tab"] div {
         color: white !important;
     }
     
