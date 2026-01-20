@@ -1,6 +1,6 @@
 # 💷 QuidWise 
-<a href="https://quidwise.streamlit.app/" target="_blank" rel="noopener noreferrer">
-  🚀 Live Demo
+- 🚀 <a href="https://quidwise.streamlit.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+
 </a>
 
   
