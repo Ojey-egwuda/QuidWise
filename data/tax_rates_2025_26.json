@@ -1,0 +1,71 @@
+{
+  "tax_year": "2025/26",
+  "income_tax": {
+    "personal_allowance": 12570,
+    "personal_allowance_taper_threshold": 100000,
+    "bands": [
+      {"name": "Basic Rate", "min": 0, "max": 37700, "rate": 0.20},
+      {"name": "Higher Rate", "min": 37700, "max": 125140, "rate": 0.40},
+      {"name": "Additional Rate", "min": 125140, "max": null, "rate": 0.45}
+    ]
+  },
+  "national_insurance": {
+    "class_1": {
+      "primary_threshold_annual": 12570,
+      "upper_earnings_limit": 50270,
+      "rate_between_thresholds": 0.08,
+      "rate_above_uel": 0.02
+    }
+  },
+  "student_loans": {
+    "plan_1": {
+      "threshold": 24990,
+      "rate": 0.09,
+      "description": "Pre-2012 England/Wales, or Scotland/NI"
+    },
+    "plan_2": {
+      "threshold": 27295,
+      "rate": 0.09,
+      "description": "Post-2012 England/Wales"
+    },
+    "plan_4": {
+      "threshold": 31395,
+      "rate": 0.09,
+      "description": "Scotland post-1998"
+    },
+    "plan_5": {
+      "threshold": 25000,
+      "rate": 0.09,
+      "description": "Post-2023 England"
+    },
+    "postgraduate": {
+      "threshold": 21000,
+      "rate": 0.06,
+      "description": "Postgraduate loans"
+    }
+  },
+  "isa": {
+    "annual_allowance": 20000,
+    "lifetime_isa_allowance": 4000,
+    "lifetime_isa_bonus_rate": 0.25
+  },
+  "pension": {
+    "annual_allowance": 60000,
+    "lifetime_allowance": null,
+    "tapered_allowance_threshold": 260000,
+    "minimum_allowance": 10000
+  },
+  "dividend": {
+    "allowance": 500,
+    "basic_rate": 0.0875,
+    "higher_rate": 0.3375,
+    "additional_rate": 0.3935
+  },
+  "capital_gains": {
+    "allowance": 3000,
+    "basic_rate": 0.18,
+    "higher_rate": 0.24,
+    "residential_property_basic": 0.18,
+    "residential_property_higher": 0.24
+  }
+}
