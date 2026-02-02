@@ -145,7 +145,7 @@ class PortfolioAnalyzer:
         if not holdings:
             return ["Consider starting with a global index fund like VWRL.L"]
         
-        # Check for single stock concentration
+        # Check for single-stock concentration
         total_value = sum(h.current_value for h in holdings)
         for holding in holdings:
             if total_value > 0:
@@ -171,7 +171,7 @@ class PortfolioAnalyzer:
 
 # Convenience function for tool usage
 def analyze_portfolio(holdings: list[dict]) -> dict:
-    """Analyze investment portfolio wrapper for LangGraph tool"""
+    """Analyze investment portfolio - wrapper for LangGraph tool"""
     analyzer = PortfolioAnalyzer()
     summary = analyzer.analyze_holdings(holdings)
     suggestions = analyzer.suggest_diversification(summary.holdings)
@@ -183,7 +183,7 @@ def analyze_portfolio(holdings: list[dict]) -> dict:
 
 
 def get_stock_quote(symbol: str) -> dict:
-    """Get single stock quote wrapper for LangGraph tool"""
+    """Get single stock quote - wrapper for LangGraph tool"""
     analyzer = PortfolioAnalyzer()
     quote = analyzer.get_quote(symbol)
     return quote or {"error": f"Could not fetch data for {symbol}"}

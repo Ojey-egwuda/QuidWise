@@ -16,7 +16,7 @@ import operator
 # Load environment variables from .env file
 load_dotenv()
 
-# Import tools
+# Import our tools
 from tools.tax_calculator import calculate_uk_tax
 from tools.transaction_parser import parse_transactions
 from tools.boe_api import get_economic_rates
@@ -40,7 +40,8 @@ def calculate_tax(
     has_postgraduate_loan: bool = False,
     pension_contribution_percent: float = 0.0,
     salary_sacrifice_pension: bool = False,
-    bonus: float = 0.0
+    bonus: float = 0.0,
+    is_secondary_job: bool = False
 ) -> dict:
     """
     Calculate UK income tax, National Insurance, and student loan repayments.
@@ -52,6 +53,7 @@ def calculate_tax(
         pension_contribution_percent: Percentage of salary contributed to pension
         salary_sacrifice_pension: Whether pension is via salary sacrifice
         bonus: Any bonus amount in GBP
+        is_secondary_job: True if this is a second job (no Personal Allowance applies - BR tax code)
     """
     return calculate_uk_tax(
         gross_salary=gross_salary,
@@ -59,7 +61,8 @@ def calculate_tax(
         has_postgraduate_loan=has_postgraduate_loan,
         pension_contribution_percent=pension_contribution_percent,
         salary_sacrifice_pension=salary_sacrifice_pension,
-        bonus=bonus
+        bonus=bonus,
+        is_secondary_job=is_secondary_job
     )
 
 
@@ -141,7 +144,7 @@ ALL_TOOLS = [
 SYSTEM_PROMPT = """You are QuidWise, a smart personal finance assistant for UK residents.
 
 CRITICAL RULES - YOU MUST FOLLOW THESE:
-1. For ANY question about tax, salary, take home pay, income tax, National Insurance, student loans, pension contributions, or marginal rates - you MUST use the calculate_tax tool. NEVER answer tax questions from memory.
+1. For ANY question about tax, salary, take-home pay, income tax, National Insurance, student loans, pension contributions, or marginal rates - you MUST use the calculate_tax tool. NEVER answer tax questions from memory.
 2. For ANY question about interest rates, inflation, Bank of England rates - you MUST use get_uk_economic_rates tool.
 3. For ANY question about stocks, ETFs, portfolio values - you MUST use get_stock_price or analyze_investment_portfolio tools.
 4. For ANY question about currency conversion - you MUST use convert_money or get_fx_rates tools.
@@ -312,5 +315,5 @@ Analyze this spending data and provide insights and suggestions. DO NOT call par
 if __name__ == "__main__":
     # Quick test
     agent = QuidWiseAgent()
-    response = agent.chat("What would my take home pay be on a £50,000 salary with a Plan 2 student loan?")
+    response = agent.chat("What would my take-home pay be on a £50,000 salary with a Plan 2 student loan?")
     print(response)

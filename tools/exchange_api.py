@@ -108,7 +108,7 @@ def convert_currency(
     from_currency: str, 
     to_currency: str
 ) -> dict:
-    """Convert currency wrapper for LangGraph tool"""
+    """Convert currency - wrapper for LangGraph tool"""
     api = ExchangeRateAPI()
     try:
         result = api.convert(amount, from_currency, to_currency)
@@ -118,7 +118,7 @@ def convert_currency(
 
 
 def get_exchange_rates() -> dict:
-    """Get common exchange rates from GBP wrapper for LangGraph tool"""
+    """Get common exchange rates from GBP - wrapper for LangGraph tool"""
     api = ExchangeRateAPI()
     try:
         return api.get_common_rates()

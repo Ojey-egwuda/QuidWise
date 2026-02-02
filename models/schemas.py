@@ -64,13 +64,15 @@ class TaxInput(BaseModel):
     bonus: float = 0.0
     dividend_income: float = 0.0
     rental_income: float = 0.0
-    
+    is_secondary_job: bool = False  # True = no Personal Allowance (BR tax code)
+
 
 class TaxBreakdown(BaseModel):
     """Detailed tax calculation result"""
     gross_income: float
     taxable_income: float
     personal_allowance_used: float
+    is_secondary_job: bool = False  # Indicates if PA was excluded
     
     # Income Tax
     income_tax_basic: float = 0.0

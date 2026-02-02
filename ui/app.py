@@ -405,11 +405,26 @@ def render_tax_tab():
     
     st.markdown("---")
     
+    # Employment Type Selection
+    st.markdown("#### 💼 Employment Type")
+    employment_type = st.radio(
+        "Is this your primary or secondary job?",
+        ["Primary Job (uses Personal Allowance)", "Secondary Job / Additional Income (no Personal Allowance)"],
+        horizontal=True,
+        help="Secondary jobs use BR tax code - you don't get Personal Allowance as it's used by your primary job"
+    )
+    is_secondary_job = employment_type.startswith("Secondary")
+    
+    if is_secondary_job:
+        st.info("💡 **Secondary Job Selected**: No Personal Allowance will be applied. This is correct if your PA is already used by your main employment.")
+    
+    st.markdown("---")
+    
     # Input Section
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown("#### 💼 Income")
+        st.markdown("#### 💷 Income")
         gross_salary = st.number_input(
             "Annual Gross Salary (£)",
             min_value=0,
@@ -471,7 +486,8 @@ def render_tax_tab():
             student_loan_plan=sl_map[student_loan],
             has_postgraduate_loan=has_pg_loan,
             pension_contribution_percent=pension_pct,
-            salary_sacrifice_pension=salary_sacrifice
+            salary_sacrifice_pension=salary_sacrifice,
+            is_secondary_job=is_secondary_job
         )
         
         result = calculator.calculate(tax_input)
@@ -573,14 +589,20 @@ def render_tax_tab():
             st.plotly_chart(fig, use_container_width=True)
         
         # Warnings and Tips
-        if result.personal_allowance_used < 12570:
+        if result.is_secondary_job:
+            st.info(
+                "ℹ️ **Secondary Job / BR Tax Code**\n\n"
+                "No Personal Allowance applied - this is correct as your PA is used by your primary employment. "
+                "All income from this job is taxed from the first pound."
+            )
+        elif result.personal_allowance_used < 12570:
             st.warning(
                 f"⚠️ **Personal Allowance Reduced**\n\n"
                 f"Due to income over £100,000, you're losing "
                 f"**{format_currency(12570 - result.personal_allowance_used)}** in tax-free allowance."
             )
         
-        if result.marginal_tax_rate >= 60:
+        if result.marginal_tax_rate >= 60 and not result.is_secondary_job:
             st.info(
                 "💡 **60% Tax Trap Alert!**\n\n"
                 "You're in the £100k-£125,140 marginal rate band. Consider increasing pension "

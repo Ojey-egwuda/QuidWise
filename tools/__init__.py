@@ -1,5 +1,5 @@
 """
-QuidWise Tools
+MoneyMind UK Tools
 """
 from tools.tax_calculator import calculate_uk_tax, UKTaxCalculator
 from tools.transaction_parser import parse_transactions, TransactionParser

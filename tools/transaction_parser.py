@@ -161,7 +161,7 @@ class TransactionParser:
         return TransactionCategory.OTHER
     
     def detect_bank_format(self, csv_content: str) -> str:
-        """Auto detect which bank the CSV is from"""
+        """Auto-detect which bank the CSV is from"""
         # Handle potential BOM and normalize
         csv_content = csv_content.strip()
         if csv_content.startswith('\ufeff'):
@@ -280,7 +280,7 @@ class TransactionParser:
         return self.transactions
     
     def parse_auto(self, csv_content: str) -> list[Transaction]:
-        """Auto detect bank format and parse"""
+        """Auto-detect bank format and parse"""
         # Handle BOM
         csv_content = csv_content.strip()
         if csv_content.startswith('\ufeff'):
@@ -346,7 +346,7 @@ class TransactionParser:
 
 # Convenience function for tool usage
 def parse_transactions(csv_content: str) -> dict:
-    """Parse bank transactions and return summary wrapper for LangGraph tool"""
+    """Parse bank transactions and return summary - wrapper for LangGraph tool"""
     parser = TransactionParser()
     transactions = parser.parse_auto(csv_content)
     summary = parser.summarize(transactions)

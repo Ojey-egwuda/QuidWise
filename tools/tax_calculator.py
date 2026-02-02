@@ -1,5 +1,5 @@
 """
-UK Tax Calculator for 2025/26 Tax Year
+UK Tax Calculator for 2024/25 Tax Year
 Handles income tax, NI, student loans, and pension contributions
 """
 import json
@@ -35,9 +35,14 @@ class UKTaxCalculator:
         else:
             taxable_gross = gross
         
-        # Personal allowance (tapers for income > £100k)
-        personal_allowance = self._calculate_personal_allowance(taxable_gross)
-        taxable_income = max(0, taxable_gross - personal_allowance)
+        # Personal allowance - NOT applied for secondary jobs (BR tax code)
+        if tax_input.is_secondary_job:
+            personal_allowance = 0.0
+            taxable_income = taxable_gross
+        else:
+            # Primary job: PA applies (tapers for income > £100k)
+            personal_allowance = self._calculate_personal_allowance(taxable_gross)
+            taxable_income = max(0, taxable_gross - personal_allowance)
         
         # Income tax
         basic, higher, additional = self._calculate_income_tax(taxable_income)
@@ -94,6 +99,7 @@ class UKTaxCalculator:
             gross_income=gross,
             taxable_income=taxable_income,
             personal_allowance_used=personal_allowance,
+            is_secondary_job=tax_input.is_secondary_job,
             income_tax_basic=basic,
             income_tax_higher=higher,
             income_tax_additional=additional,
@@ -210,8 +216,13 @@ class UKTaxCalculator:
         # This means checking where gross + 1 falls, not current gross
         
         next_gross = gross + 1
-        next_pa = self._calculate_personal_allowance(next_gross)
-        next_taxable = next_gross - next_pa
+        
+        # For secondary jobs, no PA so taxable = gross
+        if tax_input.is_secondary_job:
+            next_taxable = next_gross
+        else:
+            next_pa = self._calculate_personal_allowance(next_gross)
+            next_taxable = next_gross - next_pa
         
         bands = self.rates["income_tax"]["bands"]
         
@@ -227,11 +238,12 @@ class UKTaxCalculator:
                 income_tax_marginal = band["rate"]
         
         # Special case: £100k-£125,140 has 60% effective marginal (PA taper)
-        # Check if next gross is in the taper zone
-        taper_threshold = self.rates["income_tax"]["personal_allowance_taper_threshold"]
-        if taper_threshold < next_gross <= 125140:
-            # Every £2 earned loses £1 of PA, taxed at 40% = extra 20%
-            income_tax_marginal = 0.60
+        # ONLY applies to primary jobs - secondary jobs don't have PA to lose
+        if not tax_input.is_secondary_job:
+            taper_threshold = self.rates["income_tax"]["personal_allowance_taper_threshold"]
+            if taper_threshold < next_gross <= 125140:
+                # Every £2 earned loses £1 of PA, taxed at 40% = extra 20%
+                income_tax_marginal = 0.60
         
         # Add NI marginal (based on next gross)
         ni_rates = self.rates["national_insurance"]["class_1"]
@@ -264,9 +276,10 @@ def calculate_uk_tax(
     has_postgraduate_loan: bool = False,
     pension_contribution_percent: float = 0.0,
     salary_sacrifice_pension: bool = False,
-    bonus: float = 0.0
+    bonus: float = 0.0,
+    is_secondary_job: bool = False
 ) -> dict:
-    """Calculate UK tax wrapper for LangGraph tool"""
+    """Calculate UK tax - wrapper for LangGraph tool"""
     calculator = UKTaxCalculator()
     
     plan = None
@@ -279,7 +292,8 @@ def calculate_uk_tax(
         has_postgraduate_loan=has_postgraduate_loan,
         pension_contribution_percent=pension_contribution_percent,
         salary_sacrifice_pension=salary_sacrifice_pension,
-        bonus=bonus
+        bonus=bonus,
+        is_secondary_job=is_secondary_job
     )
     
     result = calculator.calculate(tax_input)

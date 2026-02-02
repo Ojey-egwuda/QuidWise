@@ -208,7 +208,7 @@ def test_basic_tax_calculation():
     assert result.ni_contributions > 0
     assert result.net_annual_income < 50000
     
-    print(f"£50k salary → Net: £{result.net_annual_income:,.2f}/year (£{result.net_monthly_income:,.2f}/month)")
+    print(f"✓ £50k salary → Net: £{result.net_annual_income:,.2f}/year (£{result.net_monthly_income:,.2f}/month)")
 
 
 def test_student_loan_plan_2():
@@ -225,7 +225,7 @@ def test_student_loan_plan_2():
     expected_sl = (35000 - 27295) * 0.09
     assert abs(result.student_loan_repayment - expected_sl) < 1
     
-    print(f"Plan 2 student loan: £{result.student_loan_repayment:,.2f}/year")
+    print(f"✓ Plan 2 student loan: £{result.student_loan_repayment:,.2f}/year")
 
 
 def test_high_earner_pa_taper():
@@ -237,7 +237,7 @@ def test_high_earner_pa_taper():
     result = calculator.calculate(tax_input)
     
     assert result.personal_allowance_used == 0
-    print(f"£130k earner PA taper: £{result.personal_allowance_used} (fully tapered)")
+    print(f"✓ £130k earner PA taper: £{result.personal_allowance_used} (fully tapered)")
     
     # At £110,000, PA should be partially tapered
     tax_input_2 = TaxInput(gross_salary=110000)
@@ -245,7 +245,7 @@ def test_high_earner_pa_taper():
     
     expected_pa = 12570 - ((110000 - 100000) / 2)  # £7,570
     assert abs(result_2.personal_allowance_used - expected_pa) < 1
-    print(f"£110k earner PA taper: £{result_2.personal_allowance_used:,.0f}")
+    print(f"✓ £110k earner PA taper: £{result_2.personal_allowance_used:,.0f}")
 
 
 def test_pension_salary_sacrifice():
@@ -273,7 +273,7 @@ def test_pension_salary_sacrifice():
     assert result_sacrifice.ni_contributions < result_regular.ni_contributions
     
     savings = (result_sacrifice.net_annual_income - result_regular.net_annual_income)
-    print(f"Salary sacrifice saves: £{savings:,.2f}/year vs regular pension")
+    print(f"✓ Salary sacrifice saves: £{savings:,.2f}/year vs regular pension")
 
 
 def test_marginal_rate_calculation():
@@ -295,7 +295,7 @@ def test_marginal_rate_calculation():
     result_trap = calculator.calculate(trap)
     assert result_trap.marginal_tax_rate == 62  # 60% IT + 2% NI
     
-    print(f"Marginal rates: Basic={result_basic.marginal_tax_rate}%, Higher={result_higher.marginal_tax_rate}%, Trap={result_trap.marginal_tax_rate}%")
+    print(f"✓ Marginal rates: Basic={result_basic.marginal_tax_rate}%, Higher={result_higher.marginal_tax_rate}%, Trap={result_trap.marginal_tax_rate}%")
 
 
 def test_marginal_rate_boundaries():
@@ -305,17 +305,17 @@ def test_marginal_rate_boundaries():
     # Exactly £100,000 - next £1 enters the trap
     result = calculator.calculate(TaxInput(gross_salary=100000))
     assert result.marginal_tax_rate == 62, f"£100k marginal should be 62%, got {result.marginal_tax_rate}%"
-    print(f"£100,000 marginal rate: {result.marginal_tax_rate}% (next £1 enters trap)")
+    print(f"✓ £100,000 marginal rate: {result.marginal_tax_rate}% (next £1 enters trap)")
     
     # Exactly £125,140 - next £1 is additional rate
     result = calculator.calculate(TaxInput(gross_salary=125140))
     assert result.marginal_tax_rate == 47, f"£125,140 marginal should be 47%, got {result.marginal_tax_rate}%"
-    print(f"£125,140 marginal rate: {result.marginal_tax_rate}% (next £1 is additional rate)")
+    print(f"✓ £125,140 marginal rate: {result.marginal_tax_rate}% (next £1 is additional rate)")
     
     # £99,999 - still in higher rate, not yet in trap
     result = calculator.calculate(TaxInput(gross_salary=99999))
     assert result.marginal_tax_rate == 42, f"£99,999 marginal should be 42%, got {result.marginal_tax_rate}%"
-    print(f"£99,999 marginal rate: {result.marginal_tax_rate}% (not yet in trap)")
+    print(f"✓ £99,999 marginal rate: {result.marginal_tax_rate}% (not yet in trap)")
 
 
 def test_postgraduate_loan():
@@ -334,7 +334,7 @@ def test_postgraduate_loan():
     assert abs(result.postgraduate_loan_repayment - expected_pg) < 1
     
     total_sl = result.student_loan_repayment + result.postgraduate_loan_repayment
-    print(f"Plan 2 + PG loan: £{total_sl:,.2f}/year total repayments")
+    print(f"✓ Plan 2 + PG loan: £{total_sl:,.2f}/year total repayments")
 
 
 def test_negative_salary_rejected():
@@ -355,7 +355,7 @@ def test_negative_salary_rejected():
         assert False, "Should have raised ValueError for negative salary"
     except ValueError as e:
         assert "negative" in str(e).lower()
-        print(f"Negative salary rejected: {e}")
+        print(f"✓ Negative salary rejected: {e}")
 
 
 def test_negative_bonus_rejected():
@@ -375,7 +375,7 @@ def test_negative_bonus_rejected():
         assert False, "Should have raised ValueError for negative bonus"
     except ValueError as e:
         assert "negative" in str(e).lower()
-        print(f"Negative bonus rejected: {e}")
+        print(f"✓ Negative bonus rejected: {e}")
 
 
 def test_invalid_pension_percent_rejected():
@@ -396,7 +396,7 @@ def test_invalid_pension_percent_rejected():
         assert False, "Should have raised ValueError for negative pension"
     except ValueError as e:
         assert "pension" in str(e).lower()
-        print(f"Negative pension rejected: {e}")
+        print(f"✓ Negative pension rejected: {e}")
     
     # Test over 100%
     try:
@@ -404,7 +404,7 @@ def test_invalid_pension_percent_rejected():
         assert False, "Should have raised ValueError for pension > 100%"
     except ValueError as e:
         assert "pension" in str(e).lower()
-        print(f"Pension > 100% rejected: {e}")
+        print(f"✓ Pension > 100% rejected: {e}")
 
 
 def test_zero_deductions_below_threshold():
@@ -419,7 +419,7 @@ def test_zero_deductions_below_threshold():
     assert result.total_deductions == 0, f"Expected 0 total deductions, got {result.total_deductions}"
     assert result.net_annual_income == 12000, f"Expected £12,000 net, got {result.net_annual_income}"
     
-    print(f"£12,000 salary: Zero deductions, full take home")
+    print(f"✓ £12,000 salary: Zero deductions, full take-home")
 
 
 def test_zero_salary():
@@ -433,11 +433,99 @@ def test_zero_salary():
     assert result.net_annual_income == 0
     assert result.effective_tax_rate == 0
     
-    print(f"£0 salary: All values correctly zero")
+    print(f"✓ £0 salary: All values correctly zero")
+
+
+def test_secondary_job_no_personal_allowance():
+    """Test that secondary job does not get Personal Allowance"""
+    # Import the actual calculator to test is_secondary_job
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("tax_calculator", Path(__file__).parent.parent / "tools" / "tax_calculator.py")
+    tax_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(tax_module)
+    RealCalculator = tax_module.UKTaxCalculator
+    
+    from models.schemas import TaxInput as RealTaxInput
+    
+    calculator = RealCalculator()
+    
+    # Primary job £20,000 - should have PA
+    primary = calculator.calculate(RealTaxInput(gross_salary=20000, is_secondary_job=False))
+    
+    # Secondary job £20,000 - should NOT have PA
+    secondary = calculator.calculate(RealTaxInput(gross_salary=20000, is_secondary_job=True))
+    
+    # Primary should have PA applied
+    assert primary.personal_allowance_used == 12570, f"Primary should have full PA, got {primary.personal_allowance_used}"
+    assert primary.taxable_income == 7430  # 20000 - 12570
+    
+    # Secondary should have zero PA
+    assert secondary.personal_allowance_used == 0, f"Secondary should have 0 PA, got {secondary.personal_allowance_used}"
+    assert secondary.taxable_income == 20000  # Full amount taxable
+    assert secondary.is_secondary_job == True
+    
+    # Secondary job should pay more tax (full 20% on £20k)
+    assert secondary.total_income_tax > primary.total_income_tax
+    
+    expected_secondary_tax = 20000 * 0.20  # £4,000
+    assert abs(secondary.total_income_tax - expected_secondary_tax) < 1, f"Expected £4,000 tax, got {secondary.total_income_tax}"
+    
+    print(f"✓ Secondary job: £{secondary.total_income_tax:,.2f} tax (no PA) vs Primary: £{primary.total_income_tax:,.2f} (with PA)")
+
+
+def test_secondary_job_marginal_rate():
+    """Test marginal rate for secondary job (no 60% trap since no PA to lose)"""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("tax_calculator", Path(__file__).parent.parent / "tools" / "tax_calculator.py")
+    tax_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(tax_module)
+    RealCalculator = tax_module.UKTaxCalculator
+    
+    from models.schemas import TaxInput as RealTaxInput
+    
+    calculator = RealCalculator()
+    
+    # Primary job at £110k - in the 60% trap
+    primary = calculator.calculate(RealTaxInput(gross_salary=110000, is_secondary_job=False))
+    
+    # Secondary job at £110k - NOT in trap (no PA to lose)
+    secondary = calculator.calculate(RealTaxInput(gross_salary=110000, is_secondary_job=True))
+    
+    # Primary should have 62% marginal (60% trap + 2% NI)
+    assert primary.marginal_tax_rate == 62, f"Primary £110k marginal should be 62%, got {primary.marginal_tax_rate}%"
+    
+    # Secondary should have 42% marginal (40% higher rate + 2% NI, no trap)
+    assert secondary.marginal_tax_rate == 42, f"Secondary £110k marginal should be 42%, got {secondary.marginal_tax_rate}%"
+    
+    print(f"✓ Secondary job avoids 60% trap: Primary={primary.marginal_tax_rate}%, Secondary={secondary.marginal_tax_rate}%")
+
+
+def test_secondary_job_low_income():
+    """Test secondary job with low income (would be tax-free if primary)"""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("tax_calculator", Path(__file__).parent.parent / "tools" / "tax_calculator.py")
+    tax_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(tax_module)
+    RealCalculator = tax_module.UKTaxCalculator
+    
+    from models.schemas import TaxInput as RealTaxInput
+    
+    calculator = RealCalculator()
+    
+    # £10,000 as primary job - below PA, zero tax
+    primary = calculator.calculate(RealTaxInput(gross_salary=10000, is_secondary_job=False))
+    
+    # £10,000 as secondary job - fully taxed at 20%
+    secondary = calculator.calculate(RealTaxInput(gross_salary=10000, is_secondary_job=True))
+    
+    assert primary.total_income_tax == 0, "Primary £10k should have zero tax"
+    assert secondary.total_income_tax == 2000, f"Secondary £10k should pay £2,000 tax, got {secondary.total_income_tax}"
+    
+    print(f"✓ Secondary £10k: Pays £{secondary.total_income_tax:,.2f} tax (Primary would be £0)")
 
 
 if __name__ == "__main__":
-    print("\n Running QuidWise Tax Calculator Tests\n")
+    print("\n🧪 Running QuidWise Tax Calculator Tests\n")
     print("-" * 50)
     
     test_basic_tax_calculation()
@@ -459,5 +547,11 @@ if __name__ == "__main__":
     test_zero_deductions_below_threshold()
     test_zero_salary()
     
+    # Secondary job tests
+    print("\n--- Secondary Job Tests ---")
+    test_secondary_job_no_personal_allowance()
+    test_secondary_job_marginal_rate()
+    test_secondary_job_low_income()
+    
     print("-" * 50)
-    print("\n All tests passed!\n")
+    print("\n✅ All tests passed!\n")

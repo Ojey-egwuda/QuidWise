@@ -1,17 +1,4 @@
-# 💷 QuidWise 
-🚀 <a href="https://quidwise.streamlit.app/" target="_blank" rel="noopener noreferrer">Live App</a>
-
-👉 https://quidwise.streamlit.app/
-
-
-</a>
-
-  
-</a>
-
-</a>
-
-
+# 💷 QuidWise
 
 **Smart Money for the UK** — An AI-powered personal finance assistant built with LangGraph.
 
@@ -22,17 +9,16 @@
 ## ✨ Features
 
 ### 🧮 UK Tax Calculator (2025/26)
-
 - **HMRC-Accurate** calculations with edge case handling
 - Income tax (Basic 20%, Higher 40%, Additional 45%)
 - National Insurance Class 1 (8% / 2%)
 - Student loans (Plans 1, 2, 4, 5, Postgraduate)
 - Pension contributions with salary sacrifice
 - Personal Allowance taper (£100k-£125,140 "60% trap")
+- **Secondary job support** (BR tax code - no Personal Allowance)
 - Marginal tax rate calculations at exact boundaries
 
 ### 💳 Transaction Analysis
-
 - Monzo CSV import with auto-detection
 - Generic CSV support (Date/Description/Amount)
 - Automatic spending categorization
@@ -40,7 +26,6 @@
 - AI-powered spending insights
 
 ### 📈 Investment Tracking
-
 - Real-time portfolio valuation (yfinance)
 - UK ETF support (LSE .L tickers)
 - Gain/loss tracking with cost basis
@@ -48,7 +33,6 @@
 - Diversification suggestions
 
 ### 💱 Currency & Rates
-
 - Bank of England base rate
 - Live exchange rates (150+ currencies)
 - Currency conversion tool
@@ -72,7 +56,6 @@
 ```
 
 ### Agentic Pattern
-
 - **Single Agent + Tools** (ReAct pattern)
 - LangGraph cyclic workflow with conditional routing
 - Tool enforcement via system prompt (no hallucination)
@@ -129,7 +112,7 @@ QuidWise: Here's your tax breakdown for £100,000:
 • Effective Rate: 31.44%
 • Marginal Rate: 62% ⚠️
 
-💡 You're in the 60% marginal rate band (£100k-£125,140).
+💡 You're in the 60% marginal rate band (£100k-£125,140). 
 Consider increasing pension contributions to restore your Personal Allowance.
 ```
 
@@ -138,7 +121,7 @@ Consider increasing pension contributions to restore your Personal Allowance.
 ```
 You: Why does my marginal rate exceed 50% at £45k with student loans?
 
-QuidWise: At £45,000 with Plan 2 + Postgraduate loan, your marginal rate
+QuidWise: At £45,000 with Plan 2 + Postgraduate loan, your marginal rate 
 is 43% due to LOAN STACKING:
 
 • Income Tax (Basic): 20%
@@ -155,6 +138,15 @@ This is different from the 60% PA TAPER trap which only affects £100k-£125k ea
 1. Export CSV from Monzo (Account → Settings → Export)
 2. Upload in the Transactions tab
 3. Click "Get AI Analysis" for personalized insights
+
+## 📊 API Dependencies
+
+| API | Purpose | Rate Limit | Key Required |
+|-----|---------|------------|--------------|
+| OpenAI | LLM agent (GPT-4o-mini) | Pay per use | ✅ Yes |
+| yfinance | Stock/ETF prices | Unlimited | ❌ No |
+| Bank of England | UK economic rates | Unlimited | ❌ No |
+| exchangerate-api | Currency conversion | 1,500/month | ❌ No |
 
 ## 📁 Project Structure
 
@@ -187,7 +179,6 @@ python tests/test_tax_calculator.py
 ```
 
 Tests cover:
-
 - All tax bands and thresholds
 - Marginal rate boundaries (£100k, £125,140)
 - Student loan calculations
@@ -197,12 +188,12 @@ Tests cover:
 
 ## 📋 Tax Year 2025/26 Rates
 
-| Band               | Threshold          | Rate |
-| ------------------ | ------------------ | ---- |
-| Personal Allowance | £0 - £12,570       | 0%   |
-| Basic Rate         | £12,571 - £50,270  | 20%  |
-| Higher Rate        | £50,271 - £125,140 | 40%  |
-| Additional Rate    | £125,140+          | 45%  |
+| Band | Threshold | Rate |
+|------|-----------|------|
+| Personal Allowance | £0 - £12,570 | 0% |
+| Basic Rate | £12,571 - £50,270 | 20% |
+| Higher Rate | £50,271 - £125,140 | 40% |
+| Additional Rate | £125,140+ | 45% |
 
 **National Insurance**: 8% (£12,570-£50,270), 2% (above)
 
